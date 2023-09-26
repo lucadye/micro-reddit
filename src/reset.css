@@ -12,7 +12,9 @@ head {
   display: none;
 }
 
-
+/* Fonts */
+@import url('./fonts.css');
+* { font-family: Poppins, helvetica, sans-serif; }
 
 /* New defaults */
 
@@ -36,6 +38,7 @@ h2 {
 
 /* Text styling */
 p {
+  font-size: 0.75rem;
   display: block;
 }
 b, strong {

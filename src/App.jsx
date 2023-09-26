@@ -1,6 +1,5 @@
 // import logo from './logo.svg';
 import './reset.css';
-import PostContainer from './post/PostContainer';
 
 function App() {
   return (
