@@ -72,18 +72,49 @@ function formatNumberData(number) {
   }
 }
 
+function formatMediaData({media_metadata, gallery_data}) {
+  // If either input is doesn't contain data, return nothing
+  if (typeof gallery_data === 'undefined') { return []; }
+  if (Object.keys(gallery_data).length < 1) { return []; }
+  if (typeof media_metadata === 'undefined') { return []; }
+  if (Object.keys(media_metadata).length < 1) { return []; }
+
+  const mediaArr = [];
+  Object.keys(gallery_data.items).forEach(({media_id})=>{
+    const media = media_metadata[media_id];
+    if (!media?.status !== 'valid') { return; }
+    mediaArr.push({
+      type: media.e,
+      fullType: media.m,
+      url: media.s.u,
+      x: media.s.x,
+      y: media.s.y,
+    });
+  });
+  return mediaArr;
+}
+
 function formatPageData(page) {
   const children = page.data.children;
+
   return children.map(({data}) => {
+
+    // Format the body of the comment
+    let body = undefined;
+    body = data?.selftext_html;
+    body = data?.selftext;
+    body = `<p>${body}</p>`;
+    
     return {
       title: data.title,
-      body: data.selftext_html,
+      body,
       author: data.author,
       timeAgo: formatTimeData(data.created_utc),
       subreddit: data.subreddit,
       upvotes: formatNumberData(data.ups),
       permalink: data.permalink,
       commentCount: formatNumberData(data.num_comments),
+      media: formatMediaData(data),
     };
   });
 }
@@ -114,11 +145,19 @@ async function getPage(url) {
 function formatCommentData({data}) {
   return data?.children?.map((reply) => {
     reply = reply.data;
+
     // Recursively format replies
     let replies = formatCommentData(reply.replies);
+
+    // Format the body of the comment
+    let body = undefined;
+    if (reply?.selftext_html) { body = reply.selftext_html; }
+    else if (reply?.selftext) { body = reply.selftext; }
+    body = `<p>${body}</p>`;
+
     return {
       author: reply.author,
-      body: reply.body_html,
+      body,
       timeAgo: formatTimeData(reply.created_utc),
       upvotes: formatNumberData(reply.ups),
       permalink: reply.permalink,
