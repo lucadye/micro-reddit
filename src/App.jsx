@@ -1,12 +1,13 @@
-// import logo from './logo.svg';
 import './reset.css';
+import PostContainer from './containers/PostContainer';
+import GET from './requests';
+
+const page = await GET.page('/r/popular/');
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        {/*<img src={logo} className="App-logo" alt="logo" />*/}
-      </header>
+      <main><PostContainer posts={page}/></main>
     </div>
   );
 }

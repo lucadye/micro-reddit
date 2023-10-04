@@ -1,6 +1,6 @@
 async function get(endpoint, options) {
   // Format the endpoint into a suitable url
-  endpoint = `https://www.reddit.com${endpoint.slice(0, -1)}.json`;
+  endpoint = `https://www.reddit.com${endpoint}.json`;
 
   // Make and await the request
   const response = await fetch(endpoint, options);
@@ -72,49 +72,81 @@ function formatNumberData(number) {
   }
 }
 
-function formatMediaData({media_metadata, gallery_data}) {
-  // If either input is doesn't contain data, return nothing
-  if (typeof gallery_data === 'undefined') { return []; }
-  if (Object.keys(gallery_data).length < 1) { return []; }
-  if (typeof media_metadata === 'undefined') { return []; }
-  if (Object.keys(media_metadata).length < 1) { return []; }
+// function formatMediaData({media_metadata, gallery_data}) {
+//   // If either input is doesn't contain data, return nothing
+//   if (typeof gallery_data === 'undefined') { return []; }
+//   if (Object.keys(gallery_data).length < 1) { return []; }
+//   if (typeof media_metadata === 'undefined') { return []; }
+//   if (Object.keys(media_metadata).length < 1) { return []; }
+//
+//   const mediaArr = [];
+//   gallery_data.items.forEach(({media_id})=>{
+//     const media = media_metadata[media_id];
+//     if (media?.status !== 'valid') { return; }
+//     mediaArr.push({
+//       type: media.e,
+//       url: media.s.u,
+//       width: media.s.x,
+//       height: media.s.y,
+//     });
+//   });
+//   return mediaArr;
+// }
 
-  const mediaArr = [];
-  Object.keys(gallery_data.items).forEach(({media_id})=>{
-    const media = media_metadata[media_id];
-    if (!media?.status !== 'valid') { return; }
-    mediaArr.push({
-      type: media.e,
-      fullType: media.m,
-      url: media.s.u,
-      x: media.s.x,
-      y: media.s.y,
-    });
-  });
-  return mediaArr;
-}
+// function formatPreviewData({preview: previewData}) {
+//   if (typeof previewData === 'undefined') { return []; }
+//   const {images, videos} = previewData;
+//   const preview = [];
+//
+//   console.log(previewData);
+//
+//   // Format image data
+//   if (typeof images !== 'undefined') {
+//     images.forEach((image)=>{
+//       preview.push({
+//         type: 'image',
+//         url: image?.source?.url,
+//         width: image?.source?.width,
+//         height: image?.source?.height,
+//       });
+//     });
+//   }
+//
+//   // Format video data
+//   if (typeof videos !== 'undefined') {
+//     videos.forEach((video)=>{
+//       preview.push({
+//         type: 'video',
+//         url: video?.source?.url,
+//         width: video?.source?.width,
+//         height: video?.source?.height,
+//       });
+//     });
+//   }
+//
+//   return preview;
+// }
 
 function formatPageData(page) {
   const children = page.data.children;
 
   return children.map(({data}) => {
 
-    // Format the body of the comment
-    let body = undefined;
-    body = data?.selftext_html;
-    body = data?.selftext;
-    body = `<p>${body}</p>`;
+    // Format the body of the post
+    let body = data?.selftext;
+    body = body && `<p>${body}</p>`;
     
     return {
       title: data.title,
       body,
-      author: data.author,
+      author: 'by '+data.author,
       timeAgo: formatTimeData(data.created_utc),
       subreddit: data.subreddit,
-      upvotes: formatNumberData(data.ups),
+      upvotes: 'Upvotes: '+formatNumberData(data.ups),
       permalink: data.permalink,
-      commentCount: formatNumberData(data.num_comments),
-      media: formatMediaData(data),
+      commentCount: 'Comments: '+formatNumberData(data.num_comments),
+      // media: [...formatPreviewData(data), ...formatMediaData(data)],
+      media: /https:\/\/i\.redd\.it\/.+\..+/.test(data.url) ? data.url : undefined,
     };
   });
 }
@@ -142,18 +174,16 @@ async function getPage(url) {
   return posts;
 }
 
-function formatCommentData({data}) {
-  return data?.children?.map((reply) => {
+function formatCommentData(comments) {
+  return comments?.data?.children?.map((reply) => {
     reply = reply.data;
 
     // Recursively format replies
     let replies = formatCommentData(reply.replies);
 
     // Format the body of the comment
-    let body = undefined;
-    if (reply?.selftext_html) { body = reply.selftext_html; }
-    else if (reply?.selftext) { body = reply.selftext; }
-    body = `<p>${body}</p>`;
+    let body = reply?.body;
+    body = body && `<p>${body}</p>`;
 
     return {
       author: reply.author,
