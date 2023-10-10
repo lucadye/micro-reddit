@@ -3,9 +3,9 @@ import styles from '../styles/post.module.css';
 
 export default function PostContainer({posts}) {
   return (<div className={styles.postContainer}>
-    {posts.map((post, key)=>{
+    {posts.map((post, i)=>{
       return (
-        <Post key={key} postData={post}/>
+        <Post key={i} index={i} postData={post}/>
       );
     })}
   </div>)

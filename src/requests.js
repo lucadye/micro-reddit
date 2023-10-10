@@ -205,7 +205,17 @@ async function getComments(url) {
   return formatCommentData(comments);
 }
 
+async function getSubreddit(url) {
+  return {url};
+}
+
+async function getSubreddits() {
+  return [{url: '/r/popular'}];
+}
+
 const GET = {
   page: getPage,
   comments: getComments,
+  subreddits: getSubreddits,
+  subreddit: getSubreddit,
 }; export default GET;
