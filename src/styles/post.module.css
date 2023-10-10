@@ -26,20 +26,10 @@
 .postTitle {
   grid-area: title;
   overflow: wrap;
-  color: black;
   background-color: #0001;
   border-radius: 1rem;
   padding: 0.5rem;
   margin: 0.5rem;
-}
-.postTitle * {
-  cursor: pointer;
-}
-.postTitle:hover {
-  color: black;
-}
-.postTitle:active {
-  color: black;
 }
 
 .postContent {
@@ -85,4 +75,17 @@
   max-height: 30rem;
   max-width: 100%;
   margin: 0.5rem;
+}
+
+.hideLink {
+  color: black;
+  text-decoration: none;
+}
+.hideLink:hover {
+  color: black;
+  text-decoration: none;
+}
+.hideLink:active {
+  color: black;
+  text-decoration: none;
 }

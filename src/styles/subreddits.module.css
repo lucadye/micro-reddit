@@ -1,0 +1,98 @@
+.title {
+  text-align: center;
+  background-color: #0001;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.subContainer {
+  position: fixed;
+  top: 8rem;
+  right: 4rem;
+  width: calc(30% - 1rem);
+  height: calc(100vh - 16rem);
+  background-color: #0001;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  overflow: scroll;
+}
+
+
+
+.form {
+  display: flex;
+  flex-direction: row;
+  width: calc(100% - 2rem);
+  background-color: #0001;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+}
+
+.inputText {
+  cursor: pointer;
+  display: inline-block;
+  background-color: #0001;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  width: 17rem;
+}
+
+.inputButton {
+  cursor: pointer;
+  display: inline-block;
+  background-color: #0001;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  color: black;
+  min-width: 2rem;
+  max-width: 2rem;
+  height: 2rem;
+}
+
+
+.subreddit {
+  display: flex;
+  flex-direction: row;
+  width: calc(100% - 2rem);
+  background-color: #0001;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+}
+
+.subredditName {
+  cursor: pointer;
+  display: inline-block;
+  background-color: #0001;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  width: 17rem;
+}
+
+.icon {
+  display: inline-block;
+  border-radius: 1rem;
+  color: black;
+  min-width: 4rem;
+  max-width: 4rem;
+  height: 4rem;
+}
+
+.removeButton {
+  cursor: pointer;
+  display: inline-block;
+  background-color: #0001;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  color: black;
+  min-width: 2rem;
+  max-width: 2rem;
+  height: 2rem;
+}

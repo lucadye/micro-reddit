@@ -55,7 +55,7 @@ small {
 a {
   color: #3333ff;
   transition: 0.125s;
-  cursor:pointer;
+  cursor: pointer;
 }
 a:hover {
   transition: 0.5s;
@@ -90,3 +90,24 @@ ins {
 span.line.through { text-decoration: line-through; }
 span.line.under   { text-decoration: underline; }
 span.line.over    { text-decoration: overline; }
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+::-webkit-scrollbar-track {
+  background: #0000;
+}
+::-webkit-scrollbar-thumb {
+  background: #CCCF;
+  border-radius: 1rem;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #BBBF;
+}
+
+/* Main Layout */
+main {
+  display: flex;
+  flex-direction: row;
+}

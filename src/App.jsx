@@ -1,20 +1,19 @@
 import './reset.css';
 import PostContainer from './containers/PostContainer';
+import SubredditContainer from './containers/SubredditContainer';
 
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchPosts, getPosts } from './store/postsSlice';
-import { fetchSubreddit, getSubreddits, getCurrentSub } from './store/subredditsSlice';
+import { getCurrentSub } from './store/subredditsSlice';
 
 function App() {
   const dispatch = useDispatch();
-
-  const subreddits = useSelector(getSubreddits);
   const currentSub = useSelector(getCurrentSub);
-
   useEffect(()=>{
-    dispatch(fetchPosts('/r/popular'));
+    console.log(currentSub);
+    dispatch(fetchPosts(currentSub.url));
   }, [currentSub, dispatch]);
   const page = useSelector(getPosts);
 
@@ -23,9 +22,10 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <main><PostContainer posts={page}/></main>
-    </div>
+    <main>
+      <PostContainer posts={page}/>
+      <SubredditContainer />
+    </main>
   );
 }
 

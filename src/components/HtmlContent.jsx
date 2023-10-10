@@ -1,10 +1,8 @@
-import showdown from 'showdown';
-const converter = new showdown.Converter();
+import Markdown from 'markdown-to-jsx'
 
 export default function HtmlContent({content, style}) {
-  content = converter.makeHtml(content);
   return (<div
     className={`htmlContent `+style}
-    dangerouslySetInnerHTML={{__html:content}}
-  />);
+    ><Markdown>{content}</Markdown>
+  </div>);
 }

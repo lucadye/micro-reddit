@@ -1,6 +1,13 @@
-async function get(endpoint, options) {
+async function get(endpoint, args) {
+  const {postfix, options} = args ? args : {
+    postfix: '',
+    options: {},
+  };
+
   // Format the endpoint into a suitable url
   endpoint = `https://www.reddit.com${endpoint}.json`;
+
+  if (postfix) { endpoint += postfix; }
 
   // Make and await the request
   const response = await fetch(endpoint, options);
@@ -72,65 +79,13 @@ function formatNumberData(number) {
   }
 }
 
-// function formatMediaData({media_metadata, gallery_data}) {
-//   // If either input is doesn't contain data, return nothing
-//   if (typeof gallery_data === 'undefined') { return []; }
-//   if (Object.keys(gallery_data).length < 1) { return []; }
-//   if (typeof media_metadata === 'undefined') { return []; }
-//   if (Object.keys(media_metadata).length < 1) { return []; }
-//
-//   const mediaArr = [];
-//   gallery_data.items.forEach(({media_id})=>{
-//     const media = media_metadata[media_id];
-//     if (media?.status !== 'valid') { return; }
-//     mediaArr.push({
-//       type: media.e,
-//       url: media.s.u,
-//       width: media.s.x,
-//       height: media.s.y,
-//     });
-//   });
-//   return mediaArr;
-// }
-
-// function formatPreviewData({preview: previewData}) {
-//   if (typeof previewData === 'undefined') { return []; }
-//   const {images, videos} = previewData;
-//   const preview = [];
-//
-//   console.log(previewData);
-//
-//   // Format image data
-//   if (typeof images !== 'undefined') {
-//     images.forEach((image)=>{
-//       preview.push({
-//         type: 'image',
-//         url: image?.source?.url,
-//         width: image?.source?.width,
-//         height: image?.source?.height,
-//       });
-//     });
-//   }
-//
-//   // Format video data
-//   if (typeof videos !== 'undefined') {
-//     videos.forEach((video)=>{
-//       preview.push({
-//         type: 'video',
-//         url: video?.source?.url,
-//         width: video?.source?.width,
-//         height: video?.source?.height,
-//       });
-//     });
-//   }
-//
-//   return preview;
-// }
-
 function formatPageData(page) {
   const children = page.data.children;
 
   return children.map(({data}) => {
+
+    // Filter out all 18+ pages
+    if (data.over_18) { return undefined; }
 
     // Format the body of the post
     let body = data?.selftext;
@@ -161,17 +116,9 @@ async function getPage(url) {
   // If the page doesn't exist, return the error
   if (page.error === 404) { return page; }
 
-  // Format the page data
+  // Format and return the page data
   page = formatPageData(page);
-
-  // Filter out all 18+ pages
-  const posts = [];
-  for (let post of page) {
-    if (post.over_18) { continue; }
-    posts.push(post);
-  }
-
-  return posts;
+  return page;
 }
 
 function formatCommentData(comments) {
@@ -205,12 +152,41 @@ async function getComments(url) {
   return formatCommentData(comments);
 }
 
-async function getSubreddit(url) {
-  return {url};
+function formatSubData(sub) {
+  const pattern = /^(https:\/\/styles.redditmedia.com\/[A-Za-z0-9\.\/_]+)?/;
+  const icon = pattern.exec(sub.community_icon)[0];
+  return {
+    name: sub.display_name,
+    url: sub.url,
+    icon,
+  };
 }
 
 async function getSubreddits() {
-  return [{url: '/r/popular'}];
+  const r = await get('/reddits');
+  const subs = r?.data?.children;
+
+  if (!subs) {
+    return [];
+  }
+  if (!subs?.length) {
+    return [];
+  }
+  return subs.map(sub=>formatSubData(sub.data)).slice(0, 5);
+}
+
+async function getSubreddit(query) {
+  query = encodeURI(query);
+  const r = await get('/subreddits/search', {postfix: `?q=${query}`});
+  const subs = r?.data?.children;
+
+  if (!subs) {
+    return [];
+  }
+  if (!subs?.length) {
+    return [];
+  }
+  return formatSubData(subs[0]?.data);
 }
 
 const GET = {

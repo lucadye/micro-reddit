@@ -18,17 +18,11 @@ export default function Post ({index, postData: {
 }}) {
   return (
     <article className={styles.post}>
-      <a
+      <h2
         className={styles.postTitle}
-        aria-label='Permalink'
-        target='_blank'
-        rel='noreferrer'
-        href={'https://www.reddit.com'+permalink}
-        ><h2
-          aria-label='Post Title'>
-          {title}
-        </h2>
-      </a>
+        aria-label='Post Title'>
+        {title}
+      </h2>
       <ul className={styles.postInfoContainer} aria-label='Post Info'>
         <PostInfo key='0' text={(
           <span className={styles.infoBelowTitle}>{author}, {timeAgo}, on r/{subreddit}</span>
@@ -39,6 +33,14 @@ export default function Post ({index, postData: {
         <PostInfo key='2' text={(
           <span aria-label='Comments'>{commentCount}</span>
         )}/>
+        <PostInfo key='3' text={(<a
+            className={styles.hideLink}
+            aria-label='Permalink'
+            target='_blank'
+            rel='noreferrer'
+            href={'https://www.reddit.com'+permalink}
+            >View on reddit.com
+        </a>)}/>
       </ul>
       <div className={styles.postContent}>
         {media && <Media style={styles.media} media={media}/>}
