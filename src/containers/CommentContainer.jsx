@@ -1,24 +1,28 @@
 import { useState } from 'react';
-import GET from '../requests';
 import ReplyContainer from './ReplyContainer';
 import styles from '../styles/comments.module.css';
 
-export default function CommentContainer({permalink}) {
-  const [replies, setReplies] = useState([]);
-  const [hidden, setHidden] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchComments, getComments, getCommentsByIndex } from '../store/commentsSlice';
 
-  const showHandler=async()=>{
+export default function CommentContainer({permalink, url, index}) {
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector(getComments);
+
+  const [hidden, setHidden] = useState(true);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  function showHandler() {
     setHidden(false);
-    if (!replies.length) {
-      setIsLoading(true);
-      setReplies(await GET.comments(permalink));
-      setIsLoading(false);
+    if (!hasLoaded) {
+      dispatch(fetchComments({url, index}));
+      setHasLoaded(true);
     }
   }
-  const hideHandler=async()=>{
+  function hideHandler() {
     setHidden(true);
   }
+
+  const comments = useSelector(getCommentsByIndex(index));
 
   if (hidden) {
     return (
@@ -42,7 +46,7 @@ export default function CommentContainer({permalink}) {
         Hide Comments
       </button>
       <aside className={styles.commentContainer}>
-        <ReplyContainer replies={replies} pinned={false}/>
+        <ReplyContainer replies={comments} pinned={false}/>
       </aside>
     </>)
   }
