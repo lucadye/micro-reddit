@@ -25,6 +25,6 @@ export default function Comment({data, ReplyContainer}) {
       )}
     </ul>
     <HtmlContent content={data.body} style={styles.content}/>
-    <ReplyContainer replies={data.replies} className={styles.replies}/>
+    <ReplyContainer replies={data.replies}/>
   </li>);
 }
