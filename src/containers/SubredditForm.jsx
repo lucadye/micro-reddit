@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../styles/subreddits.module.css';
 
-export default function SubredditForm({addSub}) {
+export default function SubredditForm({addSub, isloading, failedToLoad}) {
   const [q, setQ] = useState('');
   function submitHandler(e) {
     e.preventDefault();
@@ -13,11 +13,12 @@ export default function SubredditForm({addSub}) {
   function inputHandler({target}) {
     setQ(target.value);
   }
-  return (<form
+
+  return (
+  <form
     className={styles.form}
     onSubmit={submitHandler}
     >
-      <div className={styles.icon}/>
       <input
         className={styles.inputText}
         onInput={inputHandler}
@@ -31,5 +32,10 @@ export default function SubredditForm({addSub}) {
         type='button'
         >+
       </button>
+      <span className={styles.message}>{
+        isloading ? 'Loading subreddit...'
+        : failedToLoad ? 'Failed to load'
+        : ''
+      }</span>
   </form>);
 }
