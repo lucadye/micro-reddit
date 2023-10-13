@@ -12,6 +12,15 @@ head {
   display: none;
 }
 
+@media only screen and (max-width: 700px) {
+  :root {
+    font-size: 8px;
+  }
+  * {
+    font-size: 2rem;
+  }
+}
+
 /* Fonts */
 @import url('./fonts.css');
 * { font-family: Poppins, helvetica, sans-serif; }
@@ -28,6 +37,11 @@ h1 {
 }
 h2 {
   font-size: 1.5rem;
+}
+@media only screen and (max-width: 700px) {
+  h2 {
+    font-size: 3rem;
+  }
 }
 .useDefaults h1 { font-size: 3.50rem; }
 .useDefaults h2 { font-size: 3.00rem; }
@@ -93,17 +107,18 @@ span.line.over    { text-decoration: overline; }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 0.5rem;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0000;
+  background: #0001;
+  border-radius: 16px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #CCCF;
-  border-radius: 1rem;
+  background: #0002;
+  border-radius: 16px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #BBBF;
+  background: #0003;
 }
 
 /* Main Layout */

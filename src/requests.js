@@ -1,7 +1,9 @@
 async function get(endpoint, args) {
   const {postfix, options} = args ? args : {
     postfix: '',
-    options: {},
+    options: {
+      cache: 'no-cache',
+    },
   };
 
   // Format the endpoint into a suitable url
