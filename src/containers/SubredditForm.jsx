@@ -13,6 +13,11 @@ export default function SubredditForm({addSub, isloading, failedToLoad}) {
   function inputHandler({target}) {
     setQ(target.value);
   }
+  return (<form
+    className={styles.form}
+    onSubmit={submitHandler}
+    >
+      <div className={styles.icon}/>
 
   return (
   <form

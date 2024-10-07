@@ -1,4 +1,5 @@
-import './reset.css';
+import { useState } from 'react';
+
 import PostContainer from './containers/PostContainer';
 import SubredditContainer from './containers/SubredditContainer';
 import Header from './components/Header';
