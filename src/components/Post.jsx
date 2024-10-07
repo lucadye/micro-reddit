@@ -5,7 +5,7 @@ import CommentContainer from '../containers/CommentContainer'
 
 import styles from '../styles/post.module.css';
 
-export default function Post ({postData: {
+export default function Post ({index, postData: {
   title,
   body,
   author,
@@ -13,7 +13,6 @@ export default function Post ({postData: {
   upvotes,
   permalink,
   commentCount,
-  comments,
   media,
   subreddit
 }}) {
@@ -47,7 +46,7 @@ export default function Post ({postData: {
         {media && <Media style={styles.media} media={media}/>}
         {body && <HtmlContent content={body} style={styles.postBody}/>}
       </div>
-      <CommentContainer comments={comments} permalink={permalink}/>
+      <CommentContainer index={index} url={permalink} permalink={permalink}/>
     </article>
   );
 }

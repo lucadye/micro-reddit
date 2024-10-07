@@ -1,24 +1,39 @@
 import styles from '../styles/subreddits.module.css';
+import { useDispatch } from 'react-redux';
+import { resetSelected } from '../store/subredditsSlice';
 
-export default function Subreddit({data, i, removeSub}) {
+export default function Subreddit({data, i, removeSub, selected, setSelectedSub}) {
+  const dispatch = useDispatch();
   function clickHandler() {
-    removeSub(i);
+    if (selected) {
+      dispatch(resetSelected());
+      return;
+    }
+    setSelectedSub(data);
   }
-  return (<div className={styles.subreddit}>
-    <img
+  let className = styles.subreddit;
+  if (selected) {
+    className += ' ' + styles.selected;
+  }
+  return (<div className={className}>
+    {data.icon && (<img
       alt=''
       className={styles.icon}
       src={data.icon}
-    />
+    />)}
     <a
+      onClick={clickHandler}
       className={styles.subredditName}
-      href={`https://www.reddit.com${data.url}`}
+      href='#'
       >{data.name}
     </a>
     <button
       className={styles.removeButton}
-      onClick={clickHandler}
-      >X
+      onClick={()=>{
+        removeSub(i);
+        dispatch(resetSelected());
+      }}
+      >x
     </button>
   </div>);
 }

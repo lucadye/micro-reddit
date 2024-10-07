@@ -3,6 +3,14 @@
   display: flex;
   flex-direction: column;
   margin: 4rem;
+  margin-top: 7.5rem;
+}
+@media only screen and (max-width: 700px) {
+  .postContainer {
+    width: calc(70% - 9rem);
+    margin: 2rem;
+    margin-top: 7.5rem;
+  }
 }
 
 .post {
@@ -28,7 +36,7 @@
   overflow: wrap;
   background-color: #0001;
   border-radius: 1rem;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   margin: 0.5rem;
 }
 
@@ -38,8 +46,9 @@
   height: fit-content;
   background-color: #0001;
   border-radius: 1rem;
-  padding: 0 0.5rem;
+  padding: 1rem;
   margin: 0 0.5rem;
+  max-width: calc(100% - 3rem);
 }
 
 .postBody {
@@ -58,8 +67,19 @@
   grid-area: info;
 }
 
+@media only screen and (max-width: 700px) {
+  .postInfoContainer {
+    flex-direction: column;
+  }
+}
+
 .postInfoContainer :first-child {
   margin-right: auto;
+}
+@media only screen and (max-width: 700px) {
+  .postInfoContainer :first-child {
+    margin-right: 0.5rem;
+  }
 }
 
 .postInfo {

@@ -5,6 +5,7 @@
   text-align: center;
   font-weight: bolder;
   cursor: pointer;
+  margin: 0 auto;
 }
 
 .commentContainer {
@@ -36,10 +37,12 @@
 
 .title {
   margin-right: auto;
+  padding: 0.25rem;
 }
 
 .info {
   margin-right: 0.5rem;
+  align-self: center;
 }
 
 .content {

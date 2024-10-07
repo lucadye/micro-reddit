@@ -2,22 +2,38 @@ import { useState } from 'react';
 
 import PostContainer from './containers/PostContainer';
 import SubredditContainer from './containers/SubredditContainer';
+import Header from './components/Header';
 
-import './reset.css';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import GET from './requests';
-const subsDefault = await GET.subreddits();
-const pageDefault = await GET.page(subsDefault[0].url);
+import { fetchPosts, getPosts } from './store/postsSlice';
+import { getCurrentSub, setSelected, fetchSubreddit } from './store/subredditsSlice';
 
 function App() {
-  const [subs, setSubs] = useState(subsDefault);
-  const [page, setPage] = useState(pageDefault);
-  return (
+  const dispatch = useDispatch();
+  const currentSub = useSelector(getCurrentSub);
+  if (currentSub === undefined) {
+    dispatch(fetchSubreddit('popular'));
+    dispatch(setSelected(0))
+  }
+
+  useEffect(()=>{
+    dispatch(fetchPosts(currentSub.url));
+  }, [currentSub, dispatch]);
+  const page = useSelector(getPosts);
+
+  if (page.error === 429) {
+    return <h1>Too many requests!</h1>;
+  }
+
+  return (<>
+    <Header/>
     <main>
       <PostContainer posts={page}/>
-      <SubredditContainer subs={subs} setSubs={setSubs}/>
+      <SubredditContainer/>
     </main>
-  );
+  </>);
 }
 
 export default App;

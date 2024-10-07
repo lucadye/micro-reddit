@@ -1,7 +1,9 @@
 async function get(endpoint, args) {
   const {postfix, options} = args ? args : {
     postfix: '',
-    options: {},
+    options: {
+      cache: 'no-cache',
+    },
   };
 
   // Format the endpoint into a suitable url
@@ -155,8 +157,6 @@ async function getComments(url) {
 function formatSubData(sub) {
   const pattern = /^(https:\/\/styles.redditmedia.com\/[A-Za-z0-9\.\/_]+)?/;
   const icon = pattern.exec(sub.community_icon)[0];
-  console.log(sub.community_icon)
-  console.log(icon)
   return {
     name: sub.display_name,
     url: sub.url,
